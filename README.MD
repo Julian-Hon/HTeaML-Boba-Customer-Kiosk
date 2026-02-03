@@ -1,6 +1,6 @@
-This is our cool and awesome new project!
+Webapp that acts as a selfservice kiosk for a bobashop that allows customers to order themselves without employee assitance. Includes accessibility features for people with color blindness, bad eyesight, or complete blindness.
 
-to run it, use node index.js
+to run the server, use node index.js
 
 
 requirements:
