@@ -1,0 +1,6 @@
+# IDE files and setup items
+/.idea
+/.env
+
+# node modules
+node_modules/
