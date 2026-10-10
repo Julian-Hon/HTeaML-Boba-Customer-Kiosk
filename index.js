@@ -9,7 +9,7 @@ const { OAuth2Client } = require("google-auth-library");
 
 // Create express app
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 // Create pool
 const pool = new Pool({
@@ -71,34 +71,39 @@ app.use("/api", audioRoutes);
 app.use("/api", orderRoutes);
 app.use('/', drinkModificationRoute);
 
-app.get('/', async(req, res) => {
-    const user = req.session.user; 
-
-    const city = req.query.city || 'College Station';
-
+async function getWeather(city) {
     const apiKey = process.env.OPENWEATHER_API_KEY;
-    console.log('OpenWeather key present:', !!apiKey);
+    if (!apiKey) return null;
 
-    const weatherResponse = await axios.get(
-      'https://api.openweathermap.org/data/2.5/weather',
-      {
-        params: {
-          q: city,
-          appid: apiKey,
-          units: 'imperial',
-        },
-      }
-    );
+    try {
+        const weatherResponse = await axios.get(
+            'https://api.openweathermap.org/data/2.5/weather',
+            {
+                params: { q: city, appid: apiKey, units: 'imperial' },
+                timeout: 5000,
+            }
+        );
 
-    const data = {
-      city: weatherResponse.data.name,
-      temp: weatherResponse.data.main.temp,
-      feelsLike: weatherResponse.data.main.feels_like,
-      description: weatherResponse.data.weather[0].description,
-      main: weatherResponse.data.weather[0].main,
-    };
-    res.render('index', { user: user, weather: data });
-});
+        return {
+            city: weatherResponse.data.name,
+            temp: weatherResponse.data.main.temp,
+            feelsLike: weatherResponse.data.main.feels_like,
+            description: weatherResponse.data.weather[0].description,
+            main: weatherResponse.data.weather[0].main,
+        };
+    } catch (err) {
+        console.error('Unable to fetch weather:', err.message);
+        return null;
+    }
+}
+
+async function renderHome(req, res) {
+    const city = req.query.city || 'College Station';
+    const weather = await getWeather(city);
+    res.render('index', { user: req.session.user, weather });
+}
+
+app.get('/', renderHome);
 
 // Google Login
 app.get('/auth/google', (req, res) => {
@@ -228,34 +233,7 @@ function requireEmployee(req, res, next) {
 //     res.render('index', { user: req.session.user || null });
 // });
 
-app.get('/index', async(req, res) => {
-    const user = req.session.user; 
-
-    const city = req.query.city || 'College Station';
-
-    const apiKey = process.env.OPENWEATHER_API_KEY;
-    console.log('OpenWeather key present:', !!apiKey);
-
-    const weatherResponse = await axios.get(
-      'https://api.openweathermap.org/data/2.5/weather',
-      {
-        params: {
-          q: city,
-          appid: apiKey,
-          units: 'imperial',
-        },
-      }
-    );
-
-    const data = {
-      city: weatherResponse.data.name,
-      temp: weatherResponse.data.main.temp,
-      feelsLike: weatherResponse.data.main.feels_like,
-      description: weatherResponse.data.weather[0].description,
-      main: weatherResponse.data.weather[0].main,
-    };
-    res.render('index', { user: user, weather: data });
-});
+app.get('/index', renderHome);
 
 
 

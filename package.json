@@ -16,13 +16,24 @@
     "pg": "^8.16.3",
     "zod": "^4.1.13"
   },
-  "name": "project3-gang04",
+  "name": "hteaml-boba-customer-kiosk",
   "version": "1.0.0",
-  "main": "app.js",
+  "description": "An accessible self-service boba shop ordering kiosk.",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "dev": "node --watch index.js",
+    "test": "node --check index.js"
   },
-  "author": "",
+  "keywords": [
+    "boba",
+    "kiosk",
+    "accessibility",
+    "express",
+    "postgresql"
+  ],
   "license": "ISC",
-  "description": ""
+  "engines": {
+    "node": ">=20"
+  }
 }

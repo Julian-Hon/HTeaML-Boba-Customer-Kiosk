@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<head>
+    <link rel="stylesheet" href="/css/managerStyle.css">
+   <title>Sales Report Page</title>
+</head>
+<body>
+    <div class = "managerNavBarContainer">
+      <div id = "left">
+        <div>
+          <a href = "analyticsOptions"> <img height = "55px" src="/img/skipBack.png">Back</a>
+        </div>
+        <div>
+          <a href = "/logout"> <img height = "55px" src="/img/logInOrOut.png">Logout</a>
+        </div>
+      </div>
+
+      <div id = "right">
+        <div>
+            <!--    this is the start of google translate code-->
+            <div id="google_translate_element"></div>
+            <script type="text/javascript">
+                function googleTranslateElementInit() {
+                    new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'zh-CN,pt,ru,es,fil'}, 'google_translate_element');
+                }
+            </script>
+            <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+            <!--    this is the end of google translate code-->
+        </div>
+      </div>
+    </div>
+
+    <div class = "orderingTrends">
+      <div id = "title">
+        <h1>Sales Report</h1>
+      </div>
+
+      <div id = "dateInput">
+        <form action="/manager/analytics/salesReport" method="GET">
+            <label for="startDate2">Start Date:</label>
+            <input type="date" id="startDate2" name="startDate2" value="<%= startDate2 || '' %>" required>
+
+            <label for="endDate2">End Date:</label>
+            <input type="date" id="endDate2" name="endDate2" value="<%= endDate2 || '' %>" required>
+
+            <button type="submit">Filter</button>
+        </form>
+      </div>
+
+      <div id = "salesTable"> 
+        <table>
+          <thead>
+            <tr>
+              <th>Drink Name</th>
+              <th>Total Amount</th>
+              <th>Total Sales</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% salesReportResult.forEach(row => { %>
+              <tr>
+                <td><%= row.beverage_name %></td>
+                <td><%= row.total_quantity %></td>
+                <td>$<%= row.total_sales %></td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+</body>

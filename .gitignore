@@ -1,6 +1,10 @@
 # IDE files and setup items
 /.idea
 /.env
+*.log
 
 # node modules
 node_modules/
+
+# Runtime uploads
+/uploads/

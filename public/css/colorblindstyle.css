@@ -1,0 +1,302 @@
+
+/* Root variables replaced */
+:root {
+    --moss: #FFFFFF;
+    --med-green: #FFFFFF;
+    --rose: #FFFFFF;
+    --yellow: #FFFFFF;
+    --mauve: #000000;
+    --cream-white: #FFFFFF;
+    --green-header: #005BBB;
+    --light-green: #FFFFFF;
+    --button: #005BBB;
+    --button-selected: #003E80;
+}
+
+/* Global */
+html, body {
+    background-color: #FFFFFF !important;
+    color: #000000 !important;
+}
+
+#homeNavBarLeft, .customerNavBarContainer #left  {
+    background-color: #005BBB !important;
+
+}
+h1 {
+  color: #005BBB !important;
+}
+
+.title {
+  color: white !important;
+}
+.customerNavBarContainer h1, .drinkNavBar h1, .titleContainer h1 {
+  color: white !important;
+}
+
+/* Navigation bars */
+.customerNavBarContainer,
+#homeHeader,
+.drinkNavBar {
+    background-color: #005BBB !important;
+}
+
+.customerNavBarContainer a,
+#homeHeader a,
+#loginContainer a {
+    color: #FFFFFF !important;
+}
+
+#google_translate_element {
+    background: #FFFFFF !important;
+    color: #000000 !important;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2) !important;
+}
+
+/* Buttons */
+button,
+.translateButtonStyling,
+.translateButtonHomeStyling,
+#orderNowButton,
+.viewChoiceBar a,
+.confirmPageButtons,
+.profile-section button,
+#searchDrinksButton,
+#startButton,
+#endButton,
+#confirmOrderButton,
+#cancelOrderButton,
+.speechButton {
+    background-color: #005BBB !important;
+    color: #FFFFFF !important;
+    border: none !important;
+}
+
+button:hover,
+.translateButtonStyling:hover,
+.viewChoiceBar a:hover,
+.confirmPageButtons:hover,
+#orderNowButton:hover {
+    background-color: #003E80 !important;
+}
+
+/* Drink cards */
+.drinkCard,
+.container,
+#thankYouCard,
+.profile-section,
+table,
+.modifyDrink {
+    background-color: #FFFFFF !important;
+    border-color: #005BBB !important;
+}
+
+.drinkCard:hover {
+    background-color: #E6F0FF !important;
+}
+
+.drinkButton {
+    background-color: #FFFFFF !important;
+    color: #000000 !important;
+}
+
+/* Text in drink cards & menus */
+.drinkTextContainer p,
+.menu-section h2,
+.item,
+.note {
+    color: #005BBB !important;
+}
+
+/* Weather widget */
+.weatherWidgetNav p {
+    color: #000000 !important;
+}
+
+/* Cards, lists, table rows */
+.cartItem,
+tbody td {
+    background-color: #FFFFFF !important;
+    border-color: #005BBB !important;
+    color: #000000 !important;
+}
+
+/* Speech box */
+.speech-box,
+.orderSpeechContainer {
+    background: #ffffff94 !important;
+    border: 2px solid #005BBB !important;
+}
+.messageStyling{
+    background: white !important;
+    border: 2px solid #005BBB !important;
+}
+
+/* Form inputs */
+input, select, textarea {
+    background-color: #FFFFFF !important;
+    color: #000000 !important;
+    border: 1px solid #005BBB !important;
+}
+
+/* Modifiers */
+form button.active {
+    background-color: #003E80 !important;
+}
+
+/* Large-font mode should not affect colors */
+.large-font * {
+    color: inherit !important;
+}
+.large-font .text {
+    color:  #005BBB !important;
+}
+
+.large-font .note {
+    color:  #005BBB !important;
+}
+.large-font .drinkCategoryButton{
+    color: white !important;
+}
+
+/* Links when not otherwise overridden */
+a {
+    color: #005BBB !important;
+}
+
+/* Logout & colorblind toggle */
+#logoutButton,
+#colorblindToggle {
+    background-color: #FFFFFF !important;
+    color: #000000 !important;
+    border: 2px solid #005BBB !important;
+}
+
+#logoutButton:hover,
+#colorblindToggle:hover {
+    background-color: #E6F0FF !important;
+}
+
+/* Dropdowns */
+.dropdown-content {
+    background-color: #FFFFFF !important;
+    color: #000000 !important;
+}
+
+/* Ingredient search */
+#ingredientSelect {
+    background-color: #FFFFFF !important;
+    border: 1px solid #005BBB !important;
+    color: #000000 !important;
+}
+
+
+/* Order Summary */
+.totals, .orderCard {
+    border: 1px solid   #003E80 !important;
+    background-color:   #005BBB !important;
+}
+
+.orderCard p, 
+.orderCard h1,
+.totals p, 
+.Price, 
+.Quantity {
+    color: white !important;
+}
+
+#orderSummaryDrinkName{
+    color: white !important;
+}
+
+#checkout{
+    background-color: #005BBB !important;
+    color: white !important;
+}
+
+/* Speech Assistant */
+#speechAssistantStartBtn{
+    background-color : #005BBB !important;
+}
+#speechAssistantStartBtn a{
+    color : white !important;
+}
+
+/* MENU BOARD */
+.subheading{
+    color: black !important;
+    border-top: 1px solid black !important;
+    border-bottom: 1px solid black !important;
+}
+
+
+/* CUSTOMER PROFILE */
+table {
+    width: 80%;
+    margin: 40px auto;
+    border-collapse: collapse;
+    background-color:#005BBB !important;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 5px 5px 10px rgba(0,0,0,0.1);
+}
+
+thead {
+    background-color:  #005BBB;
+}
+
+thead th {
+    color: var(--mauve);
+    border-bottom: 2px solid #003E80;
+}
+
+tbody td {
+    padding: 20px;
+    text-align: center;
+    border-bottom: 1px solid var(--med-green);
+    font-size: 20px;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+td ul {
+    padding-left: 20px;
+    text-align: left;
+}
+
+td ul li {
+    color: var(--green-header);
+    font-size: 18px;
+}
+
+
+table form button {
+    padding: 10px 20px;
+    background-color: var(--green-header);
+    color: var(--cream-white);
+    border: none;
+    border-radius: 10px;
+    font-size: 18px;
+    cursor: pointer;
+    box-shadow: 5px 5px 10px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease;
+}
+
+table form button:hover {
+    background-color: #005BBB !important;
+}
+
+
+.no-orders-message,
+p.noOrders {
+    color: white !important;
+
+}
+
+#tableHeadings{
+    color: white !important;
+}
+
+

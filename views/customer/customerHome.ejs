@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<head>
+    <title>Home Page</title>
+    <link rel="stylesheet" href="/css/customerStyle.css">
+    <link rel="stylesheet" href="/css/colorblindstyle.css" id="colorblindStylesheet" disabled>
+</head>
+<body>
+<!---------- NAV BAR --------->
+<div class = "customerNavBarContainer">
+   <div class = "left">
+
+
+<!--      <label class="switch">-->
+<!--         <input type="checkbox" onclick = "toggleFont()" class = "toggleFont" checked>-->
+<!--         <span class="slider round">-->
+<!--            <span class="small-a">A</span>-->
+<!--            <span class="big-a">A</span>-->
+<!--         </span>-->
+<!--      </label>-->
+    </div>
+
+    <div id = "right">
+      <div class = "rightItem">
+               <!--    this is the start of google translate code-->
+               <button id = "translateButton" class = "translateButtonStyling">
+                  <img src = "/img/globe.png">
+               </button>
+               <div id="google_translate_element" style="display: none;"></div>
+               <script type="text/javascript">
+                  function googleTranslateElementInit() {
+                     new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'zh-CN,pt,ru,es,fil'}, 'google_translate_element');
+                  }
+               </script>
+               <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+               <!--    this is the end of google translate code-->
+
+      </div>
+      <div class="rightItem">
+         <button id="colorblindToggle" class="toggleFont">
+           Colorblind Mode
+         </button>
+       </div>
+      <div class = "rightItem">
+         <%- include('../partials/weatherNav', { weather: weather }) %>
+      </div>
+
+    </div>
+</div>
+<!---------- NAV BAR  END--------->
+
+
+    <h1>Start a new order</h1>
+
+    <div id = "customerChoice">
+            <a id = "orderNowButton" href = "/auth/google?role=customer">
+                <h2 >Log In</h2>
+            </a> 
+            <a id = "orderNowButton" href = "/customer/customerOrder">
+                <h2 >Order as Guest</h2>
+            </a> 
+    </div>
+
+   <div class = "speechToTextContainer">
+        <div id = "welcomeAssistantMessage" class = "speech-box"><p>Howdy! <br> <br>
+                                                My name is Emma, your speech assistant! I'm here to help you
+                                                place an orde via your voice only! <br> <br>
+                                                Whenever you're ready, just press the button 
+                                                below and we can get started! Thanks and Gig'em!
+        </p>
+        <div id = "speechAssistantStartBtn"><a href = "/customer/menuAsst">Let's get started</a></div>
+        </div>
+        
+        <img id = "assistantImg" src = "">
+        <button class = "speechButton" id = "speechBtn"> Speech Command Assistant</button>
+    </div>
+
+
+    <script src = "/js/customerHandler.js"></script>
+    <script src = "/js/speechAssistantHandler.js"></script>
+    <script src = "/js/googleTranslateHandler.js"></script>
+    <script>
+        const cbToggle = document.getElementById("colorblindToggle");
+        const cbSheet = document.getElementById("colorblindStylesheet");
+      
+        // Load saved preference
+        if (localStorage.getItem("colorblind") === "on") {
+          cbSheet.disabled = false;
+        }
+      
+        // Toggle on click
+        cbToggle.addEventListener("click", () => {
+          cbSheet.disabled = !cbSheet.disabled;
+      
+          localStorage.setItem(
+            "colorblind",
+            cbSheet.disabled ? "off" : "on"
+          );
+        });
+      </script>
+</body>

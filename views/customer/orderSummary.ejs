@@ -1,0 +1,168 @@
+
+<!DOCTYPE html>
+<head>
+   <title>Order Summary</title>
+   <link rel="stylesheet" href="/css/customerStyle.css">
+   <link rel="stylesheet" href="/css/colorblindstyle.css" id="colorblindStylesheet" disabled>
+</head>
+<body>
+<!---------- NAV BAR --------->
+<div class = "customerNavBarContainer">
+   <div id = "left">
+      
+      <div>   
+         <a href = "customerOrder">
+             <img src = "/img/skipBack.png"> Back</a>
+      </div>
+
+      <div>
+         <a href = "orderSummary" >
+            <img src = "/img/shoppingCart.png">Cart</a>
+      </div>
+
+      <label class="switch">
+         <input type="checkbox" onclick = "toggleFont()" class = "toggleFont" checked>
+         <span class="slider round">
+            <span class="small-a">A</span>
+            <span class="big-a">A</span>
+         </span>
+      </label>
+    </div>
+
+    <div id = "right">
+      <div class = "rightItem">
+               <!--    this is the start of google translate code-->
+               <button id = "translateButton" class = "translateButtonStyling">
+                  <img src = "/img/globe.png">
+               </button>
+               <div id="google_translate_element" style="display: none;"></div>
+               <script type="text/javascript">
+                  function googleTranslateElementInit() {
+                     new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'zh-CN,pt,ru,es,fil'}, 'google_translate_element');
+                  }
+               </script>
+               <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+               <!--    this is the end of google translate code-->
+
+      </div>
+      <div class="rightItem">
+         <button id="colorblindToggle" class="toggleFont">
+           Colorblind Mode
+         </button>
+       </div>
+      <div class = "rightItem">
+         <%- include('../partials/weatherNav', { weather: weather }) %>
+      </div>
+
+    </div>
+</div>
+<!---------- NAV BAR  END--------->
+
+
+  <h1>Order Summary</h1>
+   <!-- <div class = "row"> -->
+   
+   <% 
+   const items = (typeof order !== 'undefined' && order && Array.isArray(order.drinks)) ? order.drinks : [];
+   const calcSubtotal = items.reduce((s, d) => {
+     const p = Number(d.price) || 0;
+     const t = Number(d.toppingCharge) || 0;
+     const q = Number(d.quantity) || 1;
+     return s + (p + t) * q;
+   }, 0);
+   const subtotal = (typeof totals !== 'undefined' && totals && typeof totals.subtotal !== 'undefined') ? totals.subtotal : calcSubtotal;
+   const tax = (typeof totals !== 'undefined' && totals && typeof totals.tax !== 'undefined') ? totals.tax : subtotal * 0.085;
+   const total = (typeof totals !== 'undefined' && totals && typeof totals.total !== 'undefined') ? totals.total : subtotal + tax;
+ %>
+
+ <% if (items.length === 0) { %>
+    <div class = "orders">
+      <div class = "orderCard"><p>No items in the cart.</p></div>
+   </div>
+ <% } else { %>
+      <div class = "totals">
+         <p class = "totalText">Totals</p>
+         <p class = "subtotal">Subtotal: $<%= subtotal.toFixed(2) %></p>
+         <p class = "subtotal">Tax: $<%= tax.toFixed(2) %></p>
+         <p class = "totalText">Total: $<%= total.toFixed(2) %></p>
+      </div>
+  <div class = "orders">
+   <!-- <ol> -->
+             <% items.forEach(function(d, i) {
+                  const unit = (Number(d.price) || 0) + (Number(d.toppingCharge) || 0);
+                  const qty = Number(d.quantity) || 1;
+                  const line = unit * qty;
+             %>
+      <div class = "orderCard">
+          <div class = "orderInfoCol">
+            <h1 id = "orderSummaryDrinkName"><%= d.name %></h1>
+            <p class = "Quantity">Quantity: <%= qty %></p>
+            <div class = "details">
+              <p>
+                <% if (d.size) { %><%= d.size %>, <% } %>
+                <% if (d.iceLevel) { %> <%= d.iceLevel %>, <% } %>
+                <% if (d.sweetnessLevel) { %> <%= d.sweetnessLevel %> Sweet, <% } %>
+                <!-- TODO: add all toppings -->
+                <% if (d.toppings && d.toppings.length > 0) { %>
+                  Toppings: <%= d.toppings.join(', ') %>
+                <% } %>
+              </p>
+            </div>
+            <p class = "Price "> $<%= line.toFixed(2) %></p>
+          </div>
+        
+          <div id = "editButton">
+            <form action="/customer/editItem" method="POST">
+                <input type="hidden" name="itemIndex" value="<%= i %>">
+                <button type="submit"><img id = "editCartImg" src = "/img/edit.png" alt = "edit item"></button>
+            </form>
+          </div>
+          <div id = "removeButton">
+           <form method="POST" action="/customer/cart/remove">
+               <input type="hidden" name="index" value="<%= i %>">
+               <button type="submit">x</button>
+           </form>
+          </div>
+       </div>
+       <% }); %>
+   <!-- </ol> -->
+  </div>
+ <% } %>
+<!-- </div> -->
+
+  <a id = "checkout" class = "button" href="/customer/orderConfirmation">Check out</a>
+
+  <footer>
+    
+  </footer>
+
+  <script src = "/js/toggleFont.js"></script>
+  <script src = "/js/googleTranslateHandler.js"></script>
+ <script>
+  const cbToggle = document.getElementById("colorblindToggle");
+  const cbSheet = document.getElementById("colorblindStylesheet");
+  const editCartImg = document.getElementById("editCartImg");
+
+  // Load saved preference
+  if (localStorage.getItem("colorblind") === "on") {
+    cbSheet.disabled = false;
+  }
+ 
+
+  // Toggle on click
+  cbToggle.addEventListener("click", () => {
+    cbSheet.disabled = !cbSheet.disabled;
+    if (cbSheet.disabled){
+      editCartImg.src = "/img/edit.png";
+    }
+    else{
+      editCartImg.src = "/img/editColorBlind.jpg";
+    }
+
+    localStorage.setItem(
+      "colorblind",
+      cbSheet.disabled ? "off" : "on"
+    );
+  });
+</script>
+</body>

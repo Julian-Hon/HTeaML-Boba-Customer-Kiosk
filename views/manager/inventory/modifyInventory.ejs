@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<head>
+    <link rel="stylesheet" href="/css/managerStyle.css">
+    <title>Modify Inventory</title>
+</head>
+<body>
+    <div class = "managerNavBarContainer">
+        <div id = "left">
+            <div>
+                <a href = "..\managerHome"> <img height = "55px" src="/img/skipBack.png">Back</a>
+            </div>
+            <div>
+                <a href = "/logout"> <img height = "55px" src="/img/logInOrOut.png">Logout</a>
+            </div>
+        </div>
+
+        <div id = "right">
+            <!--    this is the start of google translate code-->
+            <div id="google_translate_element"></div>
+            <script type="text/javascript">
+                function googleTranslateElementInit() {
+                    new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'zh-CN,pt,ru,es,fil'}, 'google_translate_element');
+                }
+            </script>
+            <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+            <!--    this is the end of google translate code-->
+        </div>
+    </div>
+
+    <div class = "inventorySubPage">
+        <div id = "title">
+            <h1>Modify Inventory</h1>
+        </div>
+
+        <div id = "inventoryTable">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Stock</th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <% inventory.forEach(item => { %>
+                    <tr>
+                        <td><%= item.inventory_id %></td>
+                        <td><%= item.name %></td>
+                        <!-- <td><%= item.stock_level %></td> -->
+                        <td>
+                            <div class="stockBar">
+                                <div class="stockFill" style="width: <%= item.stock_level %>%"></div>
+                            </div>
+                            <span class="stockText"><%= item.stock_level %> / 100</span>
+                        </td>
+                        <td><form action="/manager/inventory/updateStock" method="POST">
+                                <input type="hidden" name="index" value="<%= item.inventory_id %>">
+                                <button type="submit">Restock</button>
+                            </form>
+                        </td>
+                    </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class = "invModOptions">
+        <div id = "top">
+            <div>
+                <form action="/manager/inventory/addItem" method="POST">
+                    <!--consider auto-incrementing to prevent random numbers-->
+                    <!--TODO-->
+                    <label>Inventory ID:</label>
+                    <input type="number" name="id" required>
+                    <label>Name:</label>
+                    <input type="text" name="name" required>
+                    <label>Stock Level:</label>
+                    <input type="number" name="stock">
+                    <button type="submit">Add to Inventory</button>
+                </form>
+            </div>
+        </div>
+
+        <div id = "bottom">
+            <div>
+                <form action="/manager/inventory/deleteItem" method="POST">
+                    <Label>Inventory ID:</Label>
+                    <select type="number" name="id" required>
+                        <% for (var i in inventory) { %>
+                            <option value="<%=inventory[i].inventory_id%>"><%=inventory[i].inventory_id%> - <%=inventory[i].name%></option>
+                        <% } %>
+                    </select>
+                    <button type="submit">Delete from Inventory</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>

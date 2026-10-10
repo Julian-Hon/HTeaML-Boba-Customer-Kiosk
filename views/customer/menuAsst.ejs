@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<head>
+    <title>Menu with Assistant</title>
+    <link rel="stylesheet" href="/css/customerStyle.css">
+   <link rel="stylesheet" href="/css/colorblindstyle.css" id="colorblindStylesheet" disabled>
+</head>
+<body>
+
+
+<div id = "homeHeader">
+    <div id = "homeNavBarLeft">   
+        <div>
+            <a href = "customerHome"><img src = "/img/skipBack.png"> Back</a>
+        </div>
+
+        <div>
+            <label class="switch">
+                <input type="checkbox" onclick = "toggleFont()" class = "toggleFont" checked>
+                <span class="slider round">
+                    <span class="small-a">A</span>
+                    <span class="big-a">A</span>
+                </span>
+            </label>
+        </div>
+    </div>
+
+    <h1 class = "title"><u>Menu</u></h1>
+
+    <div id = "right">
+      <div class = "rightItem">
+               <!--    this is the start of google translate code-->
+               <button id = "translateButton" class = "translateButtonStyling">
+                  <img src = "/img/globe.png">
+               </button>
+               <div id="google_translate_element" style="display: none;"></div>
+               <script type="text/javascript">
+                  function googleTranslateElementInit() {
+                     new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'zh-CN,pt,ru,es,fil'}, 'google_translate_element');
+                  }
+               </script>
+               <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+               <!--    this is the end of google translate code-->
+
+      </div>
+      <div class="rightItem">
+        <button id="colorblindToggle" class="toggleFont">
+          Colorblind Mode
+        </button>
+      </div>
+      <div class = "rightItem">
+        <%- include('../partials/weatherNav', { weather: weather }) %>
+      </div>
+
+    </div>
+
+<div id = "menuAndSpeechContainer">
+
+    <div class="menu-container" id = "menuContainer">
+
+        <div class="menu-grid">
+
+            <!-- COLUMN 1 -->
+            <div class="menu-section">
+                <h2>DRINKS</h2>
+
+                <h3 class="subheading">MILKY SERIES</h3>
+                    <% for (var i in milky_drinks) {%>
+                        <div class = "item"><span class = "text"><%=milky_drinks[i].name%></span>  <span class = "text">$<%=milky_drinks[i].price.toFixed(2)%></span></div>
+                    <% } %>
+
+
+                <h3 class="subheading">FRUITY BEVERAGE</h3>
+                    <% for (var i in fruity_drinks) {%>
+                        <div class = "item"><span class = "text"><%=fruity_drinks[i].name%></span>     <span class = "text">$<%=fruity_drinks[i].price.toFixed(2)%></span></div>
+                    <% } %>
+
+                <h3 class="subheading">FRESH BREW</h3>
+                    <% for (var i in freshBrew_drinks) {%>
+                        <div class = "item"><span class = "text"><%=freshBrew_drinks[i].name%></span> <span class = "text">$<%=freshBrew_drinks[i].price.toFixed(2)%></span></div>
+                    <% } %>
+
+                <h3 class="subheading">ICE BLENDED</h3>
+                    <% for (var i in iceBlended_drinks) {%>
+                        <div class = "item"><span class = "text"><%=iceBlended_drinks[i].name%></span> <span class = "text">$<%=iceBlended_drinks[i].price.toFixed(2)%></span></div>
+                    <% } %>
+
+                <h3 class="subheading">SEASONAL</h3>
+                    <% for (var i in seasonal_drinks) {%>
+                        <div class = "item"><span class = "text"><%=seasonal_drinks[i].name%></span> <span class = "text">$<%=seasonal_drinks[i].price.toFixed(2)%></span></div>
+                    <% } %>
+
+                <h3 class="subheading">HOT DRINKS</h3>
+                    <% for (var i in hot_drinks) {%>
+                        <div class = "item"><span class = "text"><%=hot_drinks[i].name%></span> <span class = "text">$<%=hot_drinks[i].price.toFixed(2)%></span></div>
+                    <% } %>
+            </div>
+
+
+            <!-- COLUMN 2 -->
+            <div class="menu-section">
+                <h2>DRINK MODIFICATIONS</h2>
+                <h3 class="subheading">Optional</h3>
+                <div class="item"><span class = "text">Ice Level</span></div>
+                <p class="note">No Ice &bull; Light Ice &bull; Regular Ice &bull; Extra Ice</p>
+                <div class="item"><span class = "text">Sweetness Level</span></div>
+                <p class="note">0% &bull; 30% &bull; 50% &bull; 80% &bull; 100%</p>
+                <div class="item"><span class = "text">Size</span></div>
+                <p class="note">Small &bull; Medium &bull; Large</p>
+
+                <h2 class="others-title">TOPPINGS</h2>
+                <h3 class="subheading">+ 0.75 Limit to one topping</h3>
+
+                <div class="item"><span class = "text">Tapioca Pearl</span></div>
+                <div class="item"><span class = "text">Lychee Jelly</span></div>
+                <div class="item"><span class = "text">Coffee Jelly</span></div>
+                <div class="item"><span class = "text">Ice Cream</span></div>
+                <div class="item"><span class = "text">Honey</span></div>
+                <div class="item"><span class = "text">Passion Fruit</span></div>
+                
+            </div>
+
+        </div>
+    </div>
+
+    <div class = "orderSpeechContainer">
+        <div id = "chatBox">
+            <div id = "getStartedMessage" class = "messageStyling" >
+                <p id = "chatText">
+                    Great! To place an order, just press the "start recording"
+                    button, say your order, and then press "stop recording". I will then 
+                    show you your order, and all you have to do is confirm it!
+                </p>
+                <button id="startButton">Start Recording</button>
+                <button id="endButton" disabled>Stop Recording</button>
+                <div id = "loadingContainer">Loading...<img id = "loadingBoba" src = "/img/loadingBoba.gif"></div>
+
+                <audio id="audioPlayback" controls></audio>
+            </div>
+            
+            <div id="orderConfirmationBox"  class = "messageStyling" margin-top: 20px;">
+                <h2>Order Confirmation</h2>
+                
+                <div id="parsedOrderDetails" style="margin-bottom: 10px;">
+                </div>
+                
+                <div id="orderSummary">
+                </div>
+                
+                <button id="confirmOrderButton">Confirm Order</button>
+                <button id="cancelOrderButton">Cancel</button>
+            </div>
+            <img id="assistantImgMenu" src="">
+            
+        </div>
+
+    </div>
+
+</div>
+
+
+    <script src = "/js/customerHandler.js"></script> 
+    <script src = "/js/googleTranslateHandler.js"></script> 
+    <script src = "/js/voiceAgentHandler.js"></script>
+
+    <footer>
+        <div class = "footer">
+
+        </div>
+    </footer>
+    <script src = "/js/customerHandler.js"></script>
+    <script src = "/js/googleTranslateHandler.js"></script>
+    <script src = "/js/selectHandler.js"></script>
+    <script src = "/js/toggleFont.js"></script>
+    <script>
+      const cbToggle = document.getElementById("colorblindToggle");
+      const cbSheet = document.getElementById("colorblindStylesheet");
+    
+      // Load saved preference
+      if (localStorage.getItem("colorblind") === "on") {
+        cbSheet.disabled = false;
+      }
+    
+      // Toggle on click
+      cbToggle.addEventListener("click", () => {
+        cbSheet.disabled = !cbSheet.disabled;
+    
+        localStorage.setItem(
+          "colorblind",
+          cbSheet.disabled ? "off" : "on"
+        );
+      });
+    </script>
+
+
+
+
+</body>

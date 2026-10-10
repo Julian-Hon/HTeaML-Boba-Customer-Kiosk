@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<head>
+   <link rel="stylesheet" href="/css/managerStyle.css">
+   <title>Product Usage Chart</title>
+</head>
+<body>
+   <div class = "managerNavBarContainer">
+      <div id = "left">
+         <div> 
+            <a href = "analyticsOptions"> <img height = "55px" src="/img/skipBack.png">Back</a>
+         </div>
+         <div>
+            <a href = "/logout"> <img height = "55px" src="/img/logInOrOut.png">Logout</a>
+         </div>
+      </div>
+
+      <div id = "right">
+         <div>
+            <!--    this is the start of google translate code-->
+            <div id="google_translate_element"></div>
+            <script type="text/javascript">
+               function googleTranslateElementInit() {
+                  new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'zh-CN,pt,ru,es,fil'}, 'google_translate_element');
+               }
+            </script>
+            <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+            <!--    this is the end of google translate code-->
+         </div>
+      </div>
+   </div>
+
+   <div class = "orderingTrends">
+      <div id = "title">
+         <h1>Product Usage</h1>
+      </div>
+       <div id = "dateInput">
+        <form action="/manager/analytics/productUsageChart" method="GET">
+            <label for="startDate2">Start Date:</label>
+            <input type="date" id="startDate2" name="startDate2" value="<%= startDate2 || '' %>" required>
+
+            <label for="endDate2">End Date:</label>
+            <input type="date" id="endDate2" name="endDate2" value="<%= endDate2 || '' %>" required>
+
+            <button type="submit">Filter</button>
+        </form>
+      </div>
+
+      <div id = "reportTable">
+         <table>
+            <thead>
+               <tr>
+                  <th>Item</th>
+                  <th>Usage</th>
+               </tr>
+            </thead>
+            <tbody>
+               <% allInventory.forEach(itemName => { %>
+                  <tr>
+                     <td><%= itemName %></td>
+                     <td><%= usageMap[itemName] || 0 %></td>
+                  </tr>
+                  <% }) %>
+            </tbody>
+         </table>
+      </div>
+   </div>
+</body>

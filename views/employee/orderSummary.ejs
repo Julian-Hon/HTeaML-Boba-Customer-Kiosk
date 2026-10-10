@@ -1,0 +1,128 @@
+
+<!DOCTYPE html>
+<head>
+   <title>Cart</title>
+   <link rel="stylesheet" href="/css/employeeStyle.css">
+</head>
+<body>
+<div class = "navBarContainer">
+    <div id = "left">
+
+        <div>
+            <a href = "./employeeHome">
+                <img src = "/img/skipBack.png">
+                Back</a>
+        </div>
+        <div>
+            <a href = "/logout"> <img height = "55px" src="/img/logInOrOut.png">Logout</a>
+         </div>
+
+        <div>
+            <a href = "orderSummary" >
+                <img src = "/img/shoppingCart.png">
+                Cart</a>
+        </div>
+    </div>
+
+    <div id = "right">
+        <div>
+            <!--    this is the start of google translate code-->
+            <div id="google_translate_element"></div>
+            <script type="text/javascript">
+                function googleTranslateElementInit() {
+                    new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'zh-CN,pt,ru,es,fil'}, 'google_translate_element');
+                }
+            </script>
+            <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+            <!--    this is the end of google translate code-->
+        </div>
+    </div>
+  </div>
+  <div class = "row">
+    <% 
+    const items = (typeof order !== 'undefined' && order && Array.isArray(order.drinks)) ? order.drinks : [];
+    const calcSubtotal = items.reduce((s, d) => {
+      const p = Number(d.price) || 0;
+      const t = Number(d.toppingCharge) || 0;
+      const q = Number(d.quantity) || 1;
+      return s + (p + t) * q;
+    }, 0);
+    const subtotal = (typeof totals !== 'undefined' && totals && typeof totals.subtotal !== 'undefined') ? totals.subtotal : calcSubtotal;
+    const tax = (typeof totals !== 'undefined' && totals && typeof totals.tax !== 'undefined') ? totals.tax : subtotal * 0.085;
+    const total = (typeof totals !== 'undefined' && totals && typeof totals.total !== 'undefined') ? totals.total : subtotal + tax;
+  %>
+
+  <% if (items.length === 0) { %>
+    <div class = "orders">
+      <div class = "orderCard"><p>No items in the cart.</p></div>
+      
+    </div>
+  <% } else { %>
+
+    <div class = "orders">
+      <% items.forEach(function(d, i) { 
+            const unit = (Number(d.price) || 0) + (Number(d.toppingCharge) || 0);
+            const qty = Number(d.quantity) || 1;
+            const line = unit * qty;
+      %>
+        <div class = "orderCard">
+          <div class = "orderInfoCol">
+            <h1><%= d.name %></h1>
+            <!-- <div id = "quantityButtons"> -->
+              <p class = "Quantity">Quantity: <%= qty %></p>
+              <!-- <div id = "actualButtons">
+                <form method="POST" action="/employee/cart/updateQuantity">
+                  <input type="hidden" name="index" value="<%= i %>">
+                  <input type="hidden" name="change" value="-1">
+                  <button type="submit" id = "decreaseQuantity">-</button>
+                </form>
+
+                <form method="POST" action="/employee/cart/updateQuantity">
+                    <input type="hidden" name="index" value="<%= i %>">
+                    <input type="hidden" name="change" value="1">
+                    <button type="submit" id = "increaseQuantity">+</button>
+                </form>
+              </div> -->
+            <!-- </div> -->
+            <div class = "details">
+              <p>
+                <% if (d.size) { %><%= d.size %>, <% } %>
+                <% if (d.iceLevel) { %> <%= d.iceLevel %>, <% } %>
+                <% if (d.sweetnessLevel) { %> <%= d.sweetnessLevel %> Sweet, <% } %>
+                <!-- TODO: add all toppings -->
+                <% if (d.toppings && d.toppings.length > 0) { %>
+                  Toppings: <%= d.toppings.join(', ') %>
+                <% } %>
+              </p>
+            </div>
+            <p class = "Price "> $<%= line.toFixed(2) %></p>
+          </div>
+          <div id = "editButton">
+            <form action="/employee/editItem" method="POST">
+                <input type="hidden" name="itemIndex" value="<%= i %>">
+                <button type="submit"><img src = "/img/edit.png" alt = "edit item"></button>
+            </form>
+          </div>
+          <div id = "removeButton">
+            <form method="POST" action="/employee/cart/remove">
+              <input type="hidden" name="index" value="<%= i %>">
+              <button type="submit">x</button>
+            </form>
+          </div>
+    
+        </div>
+      <% }); %>
+
+    </div>
+    <div class = "totals">
+      <p class = "totalText">Totals</p>
+      <p class = "subtotal">Subtotal: $<%= subtotal.toFixed(2) %></p>
+      <p class = "subtotal">Tax: $<%= tax.toFixed(2) %></p>
+      <p class = "totalText">Total: $<%= total.toFixed(2) %></p>
+    </div>
+  <% } %>
+  </div>
+
+ <a class = "button" href="/employee/customerEmail">Check out</a>
+ 
+</body>
