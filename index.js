@@ -3,6 +3,7 @@ const express = require('express');
 const { Pool } = require('pg');
 const dotenv = require('dotenv').config();
 const axios = require('axios');
+const crypto = require('crypto');
 
 const session = require("express-session");
 const { OAuth2Client } = require("google-auth-library");
@@ -36,10 +37,20 @@ const oauth2Client = new OAuth2Client({
     redirectUri: process.env.GOOGLE_REDIRECT_URI,
 });
 
+const isProduction = process.env.NODE_ENV === 'production';
+const sessionSecret = process.env.SESSION_SECRET || crypto.randomBytes(32).toString('hex');
+
+if (!process.env.SESSION_SECRET) {
+    if (isProduction) {
+        throw new Error('SESSION_SECRET must be set when NODE_ENV is production.');
+    }
+    console.warn('SESSION_SECRET is not set; using an ephemeral development-only session secret.');
+}
+
 // Create Session
 app.use(
     session({
-        secret: process.env.SESSION_SECRET,
+        secret: sessionSecret,
         resave: false,
         saveUninitialized: false,
 
