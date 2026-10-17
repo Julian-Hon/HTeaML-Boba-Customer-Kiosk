@@ -2,7 +2,7 @@
 const ejs = require('ejs');
 const path = require('path');
 const express = require('express');
-const { Pool } = require('pg');
+const { createPool } = require('../db/connection');
 const dotenv = require('dotenv').config();
 const session = require('express-session');
 const axios = require('axios');
@@ -13,14 +13,7 @@ router.use(express.json());
 router.use(express.urlencoded({ extended: true })); //allows for passing data from forms
 
 // Create pool
-const pool = new Pool({
-    user: process.env.PSQL_USER,
-    host: process.env.PSQL_HOST,
-    database: process.env.PSQL_DATABASE,
-    password: process.env.PSQL_PASSWORD,
-    port: process.env.PSQL_PORT,
-    ssl: {rejectUnauthorized: false}
-});
+const pool = createPool();
 
 // Add process hook to shutdown pool
 process.on('SIGINT', function() {

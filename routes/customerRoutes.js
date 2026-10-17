@@ -3,10 +3,9 @@
 const ejs = require('ejs');
 const path = require('path');
 const express = require('express');
-const { Pool } = require('pg');
+const { createPool } = require('../db/connection');
 const dotenv = require('dotenv').config();
-const session = require('express-session');
-const axios = require('axios');
+const { getWeatherResponse } = require('../services/weatherResponse');
 
 // create image arrays
 // milky image will be the default drink image when a new drink is created unless added to the array
@@ -48,21 +47,7 @@ const router = express.Router();
 router.use(express.json());
 router.use(express.urlencoded({ extended: true })); //allows for passing data from forms
 
-router.use(session({
-    secret: 'dev-only-change-this',
-    resave: false,
-    saveUninitialized: true,
-    cookie: { maxAge: 1000 * 60 * 60 } // 1 hour
-}));
-// Create pool
-const pool = new Pool({
-    user: process.env.PSQL_USER,
-    host: process.env.PSQL_HOST,
-    database: process.env.PSQL_DATABASE,
-    password: process.env.PSQL_PASSWORD,
-    port: process.env.PSQL_PORT,
-    ssl: { rejectUnauthorized: false },
-});
+const pool = createPool();
 
 // Handle shutdown
 process.on('SIGINT', function () {
@@ -88,7 +73,7 @@ router.get('/customerHome', async (req, res) => {
         const apiKey = process.env.OPENWEATHER_API_KEY;
         console.log('OpenWeather key present:', !!apiKey);
 
-        const weatherResponse = await axios.get(
+        const weatherResponse = await getWeatherResponse(
             'https://api.openweathermap.org/data/2.5/weather',
             {
                 params: {
@@ -136,7 +121,7 @@ router.get('/menuAsst', async(req, res) => {
         const apiKey = process.env.OPENWEATHER_API_KEY;
         console.log('OpenWeather key present:', !!apiKey);
 
-        const weatherResponse = await axios.get(
+        const weatherResponse = await getWeatherResponse(
         'https://api.openweathermap.org/data/2.5/weather',
         {
             params: {
@@ -249,7 +234,7 @@ router.get('/customerOrder', async (req, res) => {
         const apiKey = process.env.OPENWEATHER_API_KEY;
         console.log('OpenWeather key present:', !!apiKey);
 
-        const weatherResponse = await axios.get(
+        const weatherResponse = await getWeatherResponse(
             'https://api.openweathermap.org/data/2.5/weather',
             {
                 params: {
@@ -447,7 +432,7 @@ router.get('/orderSummary', async(req, res) => {
     const apiKey = process.env.OPENWEATHER_API_KEY;
     console.log('OpenWeather key present:', !!apiKey);
 
-    const weatherResponse = await axios.get(
+    const weatherResponse = await getWeatherResponse(
         'https://api.openweathermap.org/data/2.5/weather',
         {
             params: {
@@ -676,7 +661,7 @@ router.get('/orderConfirmation',async (req, res , next) => {
         const apiKey = process.env.OPENWEATHER_API_KEY;
         console.log('OpenWeather key present:', !!apiKey);
 
-        const weatherResponse = await axios.get(
+        const weatherResponse = await getWeatherResponse(
             'https://api.openweathermap.org/data/2.5/weather',
             {
                 params: {
@@ -771,7 +756,7 @@ router.get('/:id/customize', async (req, res, next) => {
         const apiKey = process.env.OPENWEATHER_API_KEY;
         console.log('OpenWeather key present:', !!apiKey);
 
-        const weatherResponse = await axios.get(
+        const weatherResponse = await getWeatherResponse(
             'https://api.openweathermap.org/data/2.5/weather',
             {
                 params: {
@@ -955,7 +940,7 @@ router.get('/customerProfile', async (req, res) => {
         const apiKey = process.env.OPENWEATHER_API_KEY;
         console.log('OpenWeather key present:', !!apiKey);
 
-        const weatherResponse = await axios.get(
+        const weatherResponse = await getWeatherResponse(
             'https://api.openweathermap.org/data/2.5/weather',
             {
                 params: {
