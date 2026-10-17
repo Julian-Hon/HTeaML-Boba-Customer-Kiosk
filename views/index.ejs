@@ -55,9 +55,9 @@
   <!---------- NAV BAR  END--------->
 
     <div class = "viewChoiceBar">
-        <a class = "viewchoice" href = /auth/google?role=employee> Cashier</a>
-        <a class = "viewchoice" href = /auth/google?role=manager >Manager</a>
-        <a class = "viewchoice" href = customer/customerHome>Customer Kiosk</a>
+        <a class = "viewchoice" href="<%= demoMode ? '/demo/employee' : '/auth/google?role=employee' %>">Cashier</a>
+        <a class = "viewchoice" href="<%= demoMode ? '/demo/manager' : '/auth/google?role=manager' %>">Manager</a>
+        <a class = "viewchoice" href="<%= demoMode ? '/demo/customer' : '/customer/customerHome' %>">Customer Kiosk</a>
     </div>
 
 

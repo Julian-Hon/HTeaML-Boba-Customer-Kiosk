@@ -14,52 +14,57 @@ An accessible self-service ordering kiosk for a boba shop. The project is design
 
 Node.js, Express, EJS, PostgreSQL, Google OAuth, OpenWeather, and OpenAI APIs.
 
-## Getting started
+## Try the local demo
 
-### Prerequisites
+The demo runs with fictional menu, inventory, order, customer, and staff data. It uses [PGlite](https://pglite.dev/docs/), an in-memory PostgreSQL engine, so it needs **Node.js 20+ only**: no database server, OAuth credentials, or API keys. The sample data resets each time the server restarts.
 
-- Node.js 20 or later
-- A PostgreSQL database with the kiosk schema and data
-- Google OAuth credentials
-- OpenWeather API key
+```bash
+npm install
+npm run demo
+```
 
-### Setup
+Open <http://127.0.0.1:3000> and choose **Customer Kiosk**, **Cashier**, or **Manager**. The demo account for each role is created in your local browser session. The demo binds to `127.0.0.1` and is disabled when `NODE_ENV=production`.
 
-1. Install dependencies:
+Suggested walkthrough:
 
-   ```bash
-   npm install
-   ```
+1. Choose **Customer Kiosk**, select a drink, set its options, add it to the cart, and confirm the order.
+2. Return to the home page and choose **Cashier** to browse the same seeded menu.
+3. Return to the home page and choose **Manager** to view inventory, menu editing, and analytics with sample orders.
 
-2. Copy the environment template and fill in the values:
+Weather is omitted when no OpenWeather key is configured. Voice ordering needs an OpenAI key and is outside the no-key demo path. The included audio recordings are demo artifacts; `example.mjs` is an independent OpenAI proof of concept.
 
-   ```bash
-   cp .env.example .env
-   ```
+### Screenshots from the local demo
 
-   On Windows PowerShell:
+![Customer kiosk menu with sample drinks](docs/screenshots/customer-menu.png)
+![Cashier menu with the same sample drinks](docs/screenshots/cashier-menu.png)
+![Manager home showing inventory, analytics, and menu options](docs/screenshots/manager-home.png)
 
-   ```powershell
-   Copy-Item .env.example .env
-   ```
+## Run with your own PostgreSQL database
 
-3. Start the server:
+For a local PostgreSQL setup, create an empty database and load [db/sample.sql](db/sample.sql). All names and emails in that file are fictional; use your own data and credentials for any real deployment.
 
-   ```bash
-   npm start
-   ```
+```bash
+createdb hteaml_demo
+psql -d hteaml_demo -f db/sample.sql
+cp .env.example .env
+```
 
-4. Open `http://localhost:3000`.
+On Windows PowerShell, use `Copy-Item .env.example .env` for the last command. Fill in the PostgreSQL settings in `.env`; set `PSQL_SSL=true` only if your database requires SSL. The regular server also needs Google OAuth credentials for role sign-in.
 
-## Configuration notes
+```bash
+npm start
+```
 
-The landing page works without an OpenWeather key, but it will not show weather data. Customer, employee, and manager flows require the PostgreSQL schema and seeded data used by the original project. The included audio recordings are demo artifacts; `example.mjs` is an independent OpenAI proof of concept.
+Open <http://localhost:3000>. The demo accounts and `/demo/:role` routes are available only with `npm run demo`.
 
 ## Project structure
 
 ```text
 .
 ├── index.js           # Express server entry point
+├── db/                # Database connection and fictional demo seed
+├── demo.js            # Starts the local-only demo
+├── docs/screenshots/  # Screenshots captured from the running demo
 ├── routes/             # Customer, employee, manager, and API routes
 ├── views/              # EJS templates
 ├── public/             # Browser JavaScript, styles, images, and audio

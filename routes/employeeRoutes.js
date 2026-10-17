@@ -1,8 +1,7 @@
 
 const express = require('express');
-const { Pool } = require('pg');
+const { createPool } = require('../db/connection');
 const dotenv = require('dotenv').config();
-const session = require('express-session');
 
 // create ORDER object
 function Order(customer_id, total_price, month, week, date, hour, year, combine_date){
@@ -35,21 +34,7 @@ const router = express.Router();
 router.use(express.json());
 router.use(express.urlencoded({ extended: true })); //allows for passing data from forms
 
-router.use(session({
-  secret: 'dev-only-change-this',
-  resave: false,
-  saveUninitialized: true,
-  cookie: { maxAge: 1000 * 60 * 60 } // 1 hour
-}));
-// Create pool
-const pool = new Pool({
-  user: process.env.PSQL_USER,
-  host: process.env.PSQL_HOST,
-  database: process.env.PSQL_DATABASE,
-  password: process.env.PSQL_PASSWORD,
-  port: process.env.PSQL_PORT,
-  ssl: { rejectUnauthorized: false },
-});
+const pool = createPool();
 
 // Handle shutdown
 process.on('SIGINT', function () {

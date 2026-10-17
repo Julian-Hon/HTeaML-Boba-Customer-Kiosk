@@ -1,4 +1,4 @@
-<% if (weather) { %>
+<% if (weather && weather.temp != null) { %>
     <% 
       const validIcons = ['mist', 'rain', 'snow', 'clear', 'clouds', 'drizzle'];
       let main = (weather.main || '').toLowerCase();

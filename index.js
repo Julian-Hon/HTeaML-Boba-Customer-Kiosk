@@ -1,8 +1,8 @@
 
 const express = require('express');
-const { Pool } = require('pg');
+const { createPool, demoMode } = require('./db/connection');
 const dotenv = require('dotenv').config();
-const axios = require('axios');
+const { getWeatherResponse } = require('./services/weatherResponse');
 const crypto = require('crypto');
 
 const session = require("express-session");
@@ -13,14 +13,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // Create pool
-const pool = new Pool({
-    user: process.env.PSQL_USER,
-    host: process.env.PSQL_HOST,
-    database: process.env.PSQL_DATABASE,
-    password: process.env.PSQL_PASSWORD,
-    port: process.env.PSQL_PORT,
-    ssl: {rejectUnauthorized: false}
-});
+const pool = createPool();
 
 // Add process hook to shutdown pool
 process.on('SIGINT', function() {
@@ -57,6 +50,11 @@ app.use(
     })
 );
 
+app.use((req, res, next) => {
+    res.locals.demoMode = demoMode;
+    next();
+});
+
 app.set("view engine", "ejs");
 
 // let any files in public folder to be accesible, so that browser can access it
@@ -87,7 +85,7 @@ async function getWeather(city) {
     if (!apiKey) return null;
 
     try {
-        const weatherResponse = await axios.get(
+        const weatherResponse = await getWeatherResponse(
             'https://api.openweathermap.org/data/2.5/weather',
             {
                 params: { q: city, appid: apiKey, units: 'imperial' },
@@ -115,6 +113,25 @@ async function renderHome(req, res) {
 }
 
 app.get('/', renderHome);
+
+if (demoMode) {
+    app.get('/demo/:role', (req, res) => {
+        const users = {
+            customer: { id: 1, name: 'Casey', email: 'casey@example.test', role: 'customer' },
+            employee: { id: 1, name: 'Emery', email: 'emery@example.test', role: 'employee' },
+            manager: { id: 1, name: 'Morgan', email: 'morgan@example.test', role: 'manager' },
+        };
+        const user = users[req.params.role];
+        if (!user) return res.sendStatus(404);
+        req.session.user = user;
+        const destinations = {
+            customer: '/customer/customerOrder',
+            employee: '/employee/employeeHome',
+            manager: '/manager/managerHome',
+        };
+        res.redirect(destinations[user.role]);
+    });
+}
 
 // Google Login
 app.get('/auth/google', (req, res) => {
@@ -259,7 +276,7 @@ app.get('/menu', async(req, res) => {
         const apiKey = process.env.OPENWEATHER_API_KEY;
         console.log('OpenWeather key present:', !!apiKey);
 
-        const weatherResponse = await axios.get(
+        const weatherResponse = await getWeatherResponse(
         'https://api.openweathermap.org/data/2.5/weather',
         {
             params: {
@@ -370,6 +387,6 @@ app.get('/menu', async(req, res) => {
 module.exports = { app, pool };
 
 
-app.listen(port, () => {
+app.listen(port, demoMode ? '127.0.0.1' : undefined, () => {
     console.log(`Example app listening at http://localhost:${port}`);
 });

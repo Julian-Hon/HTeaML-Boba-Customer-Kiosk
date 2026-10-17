@@ -3,7 +3,6 @@
 const ejs = require('ejs');
 const path = require('path');
 const express = require('express');
-const { Pool } = require('pg');
 const dotenv = require('dotenv').config();
 const session = require('express-session');
 const axios = require('axios');
@@ -54,4 +53,4 @@ router.post('/drinkId', async (req,res) => {
 
     
 
-module.exports = router;  
+module.exports = router;
